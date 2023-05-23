@@ -2,8 +2,6 @@ package com.example.LibManager.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Set;
 
