@@ -162,6 +162,7 @@ body {
 .table {
     background-color: #f5f5f5;
     text-align: center;
+    height: 600px;
 }
 .table .thead-dark th{
     background-color: #4daf54;
@@ -206,4 +207,12 @@ body {
 }
 .close {
     display: none;
+}
+.no-result-found {
+    width: 100%;
+    text-align: center;
+}
+.no-result-found > img {
+    width: 80%;
+    height: 80%;
 }
