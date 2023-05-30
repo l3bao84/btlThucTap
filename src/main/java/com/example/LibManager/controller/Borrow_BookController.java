@@ -2,6 +2,7 @@ package com.example.LibManager.controller;
 
 import com.example.LibManager.models.*;
 import com.example.LibManager.repositories.*;
+import com.example.LibManager.services.LengthOfMonth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,9 +49,14 @@ public class Borrow_BookController {
         Borrow borrow = borrowRepository.findByCustomer(foundCustomer).get();
 
         // thời gian mượn sách không quá 7 ngày
-        LocalDate returnDay = LocalDate.of(LocalDate.now().getYear(),
-                                           LocalDate.now().getMonth(),
-                                           LocalDate.now().getDayOfMonth() + 7);
+        LocalDate returnDay = null;
+        int lom = LengthOfMonth.LOM(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue());
+
+        if(LocalDate.now().getDayOfMonth() >= 25) {
+            returnDay = LocalDate.of(LocalDate.now().getYear(),
+                    LocalDate.now().getMonthValue() + 1,
+                    (LocalDate.now().getDayOfMonth() + 7) - lom);
+        }
 
         Borrow_Book bb = new Borrow_Book(borrow, borrowBook, LocalDate.now(), returnDay, "Đang mượn");
 
