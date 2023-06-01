@@ -1,9 +1,9 @@
 package com.example.LibManager.controller;
 
 import com.example.LibManager.models.Book;
-import com.example.LibManager.models.Borrow;
-import com.example.LibManager.models.BookDTO;
 import com.example.LibManager.models.Customer;
+import com.example.LibManager.models.BookDTO;
+import com.example.LibManager.models.Borrow;
 import com.example.LibManager.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,18 +48,19 @@ public class CustomerController {
 
     public String genID() {
         Iterable<Borrow> borrows = borrowRepository.findAll();
-        if(size(borrows) == 0) {
-            return "BR" +(String.format("%03d", 1));
+        ArrayList<String> IDs = new ArrayList<String>();
+        for (Borrow b:borrows) {
+            IDs.add(b.getBorrowID().replaceAll("BR", ""));
         }
-        return "BR" +(String.format("%03d", size(borrows) + 1));
+        return "BR" + (String.format("%03d", IDs.stream().mapToLong(Long::parseLong).max().orElse(0L) + 1));
     }
 
     @RequestMapping(value = "/addCustomer/{bookID}", method = RequestMethod.POST)
     public String addCustomer(ModelMap modelMap,
-                              @ModelAttribute("customer") Customer customer,
+                              @Valid @ModelAttribute("customer") Customer customer,
                               BindingResult bindingResult,
                               @PathVariable String bookID) {
-        if(bindingResult.hasErrors() == true) {
+        if(bindingResult.hasErrors()) {
             Book book = bookRepository.findById(bookID).get();
             modelMap.addAttribute("author", authorRepository.findById(book.getAuthorID()).get());
             modelMap.addAttribute("plc", plCompanyRepository.findById(book.getPlCompanyID()).get());
