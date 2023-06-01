@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -55,7 +52,7 @@ public class CustomerController {
         return "BR" + (String.format("%03d", IDs.stream().mapToLong(Long::parseLong).max().orElse(0L) + 1));
     }
 
-    @RequestMapping(value = "/addCustomer/{bookID}", method = RequestMethod.POST)
+    @PostMapping("/addCustomer/{bookID}")
     public String addCustomer(ModelMap modelMap,
                               @Valid @ModelAttribute("customer") Customer customer,
                               BindingResult bindingResult,

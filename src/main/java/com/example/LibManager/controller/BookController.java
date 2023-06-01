@@ -34,7 +34,8 @@ public class BookController {
 
     private final StorageService service;
 
-    @RequestMapping(path = "/detailBook/{bookID}", method = RequestMethod.GET)
+
+    @GetMapping("/detailBook/{bookID}")
     public String getDetailBook(ModelMap modelMap, @PathVariable String bookID) {
         Book book = bookRepository.findById(bookID).get();
         modelMap.addAttribute("author", authorRepository.findById(book.getAuthorID()).get());
@@ -45,7 +46,7 @@ public class BookController {
         return "detailBook";
     }
 
-    @RequestMapping(path = "/manageBook", method = RequestMethod.GET)
+    @GetMapping("/manageBook")
     public String manageBook(ModelMap modelMap) {
 
         Iterable<Borrow_Book> bbs = bBRepository.findAll();
@@ -56,7 +57,7 @@ public class BookController {
         return "manageBook";
     }
 
-    @RequestMapping(path = "/deleteBook/{bookID}", method = RequestMethod.POST)
+    @PostMapping("/deleteBook/{bookID}")
     public String deleteBook(@PathVariable String bookID, ModelMap modelMap) {
         try{
             Iterable<Borrow_Book> bbs = bBRepository.findAll();
@@ -78,7 +79,7 @@ public class BookController {
         }
     }
 
-    @RequestMapping(path = "/insertBook", method = RequestMethod.GET)
+    @GetMapping("/insertBook")
     public String insertBook(ModelMap modelMap) {
         modelMap.addAttribute("book", new Book());
         modelMap.addAttribute("categories", categoryRepository.findAll());
@@ -138,17 +139,12 @@ public class BookController {
                 .body(imageData);
     }
 
-    @RequestMapping(path = "/insertBook", method = RequestMethod.POST)
+    @PostMapping("/insertBook")
     public String insertBook(ModelMap modelMap,
                              @Valid @ModelAttribute("book") Book book,
                              BindingResult bindingResult,
                              @RequestParam("file") MultipartFile file) {
         if(bindingResult.hasErrors()) {
-            /*modelMap.addAttribute("books", bookRepository.findAll());
-            modelMap.addAttribute("bbs", bBRepository.findAll());
-            modelMap.addAttribute("bookDTO", new BookDTO());
-            return "manageBook";*/
-            //modelMap.addAttribute("book", new Book());
             modelMap.addAttribute("categories", categoryRepository.findAll());
             modelMap.addAttribute("bookDTO", new BookDTO());
             return "insertBook";
@@ -186,7 +182,7 @@ public class BookController {
         }
     }
 
-    @RequestMapping(path = "/updateBookForm/{bookID}", method = RequestMethod.GET)
+    @GetMapping("/updateBookForm/{bookID}")
     public String updateBook(ModelMap modelMap, @PathVariable String bookID) {
         modelMap.addAttribute("categories", categoryRepository.findAll());
         Book book = bookRepository.findById(bookID).get();
@@ -197,7 +193,7 @@ public class BookController {
         return "updateBook";
     }
 
-    @RequestMapping(path = "/updateBook/{bookID}", method = RequestMethod.POST)
+    @PostMapping("/updateBook/{bookID}")
     public String updateBook(ModelMap modelMap,
                              @PathVariable String bookID,
                              @Valid @ModelAttribute("book") Book book,
@@ -242,8 +238,8 @@ public class BookController {
         modelMap.addAttribute("bookDTO", new BookDTO());
         return "manageBook";
     }
-
-    @RequestMapping(path = "/getBooksByCategoryID/{categoryID}", method = RequestMethod.GET)
+    
+    @GetMapping("/getBooksByCategoryID/{categoryID}")
     public String getBooksByCategoryID(ModelMap modelMap, @PathVariable String categoryID) {
         ArrayList<Book> books = (ArrayList<Book>) bookRepository.findByCategoryID(categoryID);
         if(!books.isEmpty()) {
