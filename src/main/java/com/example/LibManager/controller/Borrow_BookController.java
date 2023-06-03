@@ -75,6 +75,10 @@ public class Borrow_BookController {
             returnDay = LocalDate.of(LocalDate.now().getYear(),
                     LocalDate.now().getMonthValue() + 1,
                     (LocalDate.now().getDayOfMonth() + 7) - lom);
+        }else {
+            returnDay = LocalDate.of(LocalDate.now().getYear(),
+                    LocalDate.now().getMonth(),
+                    LocalDate.now().getDayOfMonth() + 7);
         }
 
         Borrow_Book bb = new Borrow_Book(borrow, borrowBook, LocalDate.now(), returnDay, borrowBook.getBookPrice() * 10 / 100,"Đang mượn");
